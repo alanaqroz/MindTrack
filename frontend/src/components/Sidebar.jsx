@@ -7,8 +7,11 @@ export default function Sidebar({ currentPage, onNavigate }) {
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
-        <div className="sidebar-logo-mark">MT</div>
-        <span className="sidebar-logo-text">MindTrack</span>
+        <img
+          src="/MindTrackLogo.png"
+          alt="MindTrack"
+          style={{ width: 150, height: 150, objectFit: 'contain' }}
+        />
       </div>
 
       <nav className="sidebar-nav">
