@@ -10,7 +10,14 @@ export default function Sidebar({ currentPage, onNavigate }) {
         <img
           src="/MindTrackLogo.png"
           alt="MindTrack"
-          style={{ width: 150, height: 150, objectFit: 'contain' }}
+          style={{
+            width: 110,
+            height: 110,
+            objectFit: 'contain',
+            background: '#FFFFFF',
+            borderRadius: 20,
+            padding: 8,
+          }}
         />
       </div>
 
