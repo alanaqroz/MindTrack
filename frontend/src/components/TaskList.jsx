@@ -1,9 +1,22 @@
 import { useState, useEffect } from 'react'
 import { taskAPI } from '../services/api.js'
 
+const PRIORITY_OPTIONS = [
+  { value: 'ALTA', label: 'Alta' },
+  { value: 'MEDIA', label: 'Média' },
+  { value: 'BAIXA', label: 'Baixa' },
+]
+
+const priorityStyle = {
+  ALTA:  { background: '#FFE0E0', color: '#C0392B', label: 'Alta' },
+  MEDIA: { background: '#FFF4CC', color: '#B07D00', label: 'Média' },
+  BAIXA: { background: '#D8F3DC', color: '#2D6A4F', label: 'Baixa' },
+}
+
 export default function TaskList({ subject, onBack }) {
   const [tasks, setTasks] = useState([])
   const [newTitle, setNewTitle] = useState('')
+  const [priority, setPriority] = useState('MEDIA')
   const [loading, setLoading] = useState(true)
 
   const loadTasks = () => {
@@ -20,8 +33,9 @@ export default function TaskList({ subject, onBack }) {
   const handleAdd = async () => {
     const title = newTitle.trim()
     if (!title) return
-    await taskAPI.create(title, subject.id)
+    await taskAPI.create(title, subject.id, priority)
     setNewTitle('')
+    setPriority('MEDIA')
     loadTasks()
   }
 
@@ -68,6 +82,17 @@ export default function TaskList({ subject, onBack }) {
           onChange={(e) => setNewTitle(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
         />
+        <select
+          className="input-select"
+          value={priority}
+          onChange={(e) => setPriority(e.target.value)}
+        >
+          {PRIORITY_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
         <button className="btn-primary" onClick={handleAdd}>
           + Adicionar
         </button>
@@ -81,28 +106,37 @@ export default function TaskList({ subject, onBack }) {
         </div>
       ) : (
         <div className="task-items">
-          {tasks.map((task) => (
-            <div
-              key={task.id}
-              className={`task-item${task.completed ? ' done' : ''}`}
-            >
+          {tasks.map((task) => {
+            const ps = priorityStyle[task.priority] || priorityStyle.MEDIA
+            return (
               <div
-                className={`task-checkbox${task.completed ? ' checked' : ''}`}
-                onClick={() => handleComplete(task)}
-                title={task.completed ? 'Concluída' : 'Marcar como concluída'}
+                key={task.id}
+                className={`task-item${task.completed ? ' done' : ''}`}
               >
-                {task.completed && '✓'}
+                <div
+                  className={`task-checkbox${task.completed ? ' checked' : ''}`}
+                  onClick={() => handleComplete(task)}
+                  title={task.completed ? 'Concluída' : 'Marcar como concluída'}
+                >
+                  {task.completed && '✓'}
+                </div>
+                <span className="task-title">{task.title}</span>
+                <span
+                  className="priority-tag"
+                  style={{ background: ps.background, color: ps.color }}
+                >
+                  {ps.label}
+                </span>
+                <button
+                  className="btn-icon"
+                  onClick={() => handleDelete(task.id)}
+                  title="Deletar"
+                >
+                  x
+                </button>
               </div>
-              <span className="task-title">{task.title}</span>
-              <button
-                className="btn-icon"
-                onClick={() => handleDelete(task.id)}
-                title="Deletar"
-              >
-                x
-              </button>
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
     </div>

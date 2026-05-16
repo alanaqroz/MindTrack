@@ -14,9 +14,6 @@ export default function Sidebar({ currentPage, onNavigate }) {
             width: 110,
             height: 110,
             objectFit: 'contain',
-            background: '#FFFFFF',
-            borderRadius: 20,
-            padding: 8,
           }}
         />
       </div>
