@@ -26,11 +26,11 @@ export const taskAPI = {
   getAll: () =>
     fetch(`${BASE}/tasks`).then((r) => r.json()),
 
-  create: (title, subjectId) =>
+  create: (title, subjectId, priority = 'MEDIA') =>
     fetch(`${BASE}/tasks`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, subject: { id: subjectId } }),
+      body: JSON.stringify({ title, priority, subject: { id: subjectId } }),
     }).then((r) => r.json()),
 
   complete: (id) =>

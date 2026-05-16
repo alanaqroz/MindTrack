@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 @Entity
 public class Task {
 
+    public enum Priority {
+        ALTA, MEDIA, BAIXA
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -12,6 +16,9 @@ public class Task {
     private String title;
 
     private boolean completed;
+
+    @Enumerated(EnumType.STRING)
+    private Priority priority = Priority.MEDIA;
 
     @ManyToOne
     @JoinColumn(name = "subject_id")
@@ -29,6 +36,10 @@ public class Task {
         return completed;
     }
 
+    public Priority getPriority() {
+        return priority;
+    }
+
     public Subject getSubject() {
         return subject;
     }
@@ -43,6 +54,10 @@ public class Task {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
     }
 
     public void setSubject(Subject subject) {
